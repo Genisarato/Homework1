@@ -118,6 +118,7 @@ public class ArticleService {
                        } catch (Exception e) {
                            return Response.status(Response.Status.UNAUTHORIZED).entity("Autenticació fallida").build();
                        }
+                        a.sumarViews();
                        return Response.status(Response.Status.OK).entity(a).build();
             }
             else{
