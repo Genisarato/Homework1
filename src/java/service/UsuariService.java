@@ -67,33 +67,32 @@ public class UsuariService {
     /*@GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getCustomerById(@PathParam ("id") int id){
-       String queryText = "SELECT u FROM Usuari u WHERE u.id = :id";    //Contrasenya????
+       String queryText = "SELECT u FROM Usuari u WHERE u.id = :id";
        TypedQuery<Usuari> query = em.createQuery(queryText, Usuari.class);
        query.setParameter("id", id);
        Usuari result = query.getSingleResult();
-       if (result != null) {
-           //result.setPassword(null);  //Si es guardava la contrasenya, aqui s'anula per a no ensenyarla (sha de crear setPassword)
-           return Response.status(Response.Status.OK).entity(result).build();
-       } else return Response.status(Response.Status.NOT_FOUND).build();
+       if (result != null) return Response.status(Response.Status.OK).entity(result).build();
+        else return Response.status(Response.Status.NOT_FOUND).build();
     }
     
     @PUT
     @Secured
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response modifyCustomerById(@PathParam ("id") int id, String nom, String dni, int telef){
+    public Response modifyCustomerById(@PathParam ("id") int id, String nom, String dni, int telef, String username){
        String queryText = "SELECT u FROM Usuari u WHERE u.id = :id";
        TypedQuery<Usuari> query = em.createQuery(queryText, Usuari.class);
        query.setParameter("id", id);
        Usuari u = query.getSingleResult();
        if (u == null) return Response.status(Response.Status.NOT_FOUND).build();
-       queryText = "UPDATE Usuari SET nom = :nom, dni = :dni, telef = :telef WHERE id = :id";
+       queryText = "UPDATE Usuari SET nom = :nom, dni = :dni, telef = :telef, username = :username WHERE id = :id";
        Query queryMod = em.createQuery(queryText);
        queryMod.setParameter("nom", nom);
        queryMod.setParameter("dni", dni);
        queryMod.setParameter("telef", telef);
+       queryMod.setParameter("username", username);
        queryMod.setParameter("id", id);
-       queryMod.executeUpdate();
-       return Response.status(Response.Status.OK).build();
+       if (queryMod.executeUpdate() == 1) return Response.status(Response.Status.OK).build();
+       else return Response.status(Response.Status.BAD_REQUEST).build();
     }*/
 }
 

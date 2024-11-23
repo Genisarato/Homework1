@@ -39,14 +39,20 @@
                 "INSERT INTO " + schema + ".TOPIC VALUES (NEXT VALUE FOR TOPIC_GEN, 'Computer Science')",
                 "INSERT INTO " + schema + ".COMMENT VALUES (NEXT VALUE FOR COMMENT_GEN, 'Skeleton code', 1)",
                 "INSERT INTO " + schema + ".COMMENT VALUES (NEXT VALUE FOR COMMENT_GEN, 'for homework1', 1)",
-                "INSERT INTO " + schema + ".CREDENTIALS VALUES (NEXT VALUE FOR CREDENTIALS_GEN, 'sob', 'sob')"
+                "INSERT INTO " + schema + ".CREDENTIALS VALUES (NEXT VALUE FOR CREDENTIALS_GEN, 'sob', 'sob')",
+                "INSERT INTO " + schema + ".USUARI (ID, NOM, DNI, TELEF) VALUES (NEXT VALUE FOR USUARI_GEN, 'Joan', '12345678A')",
+                "INSERT INTO " + schema + ".USUARI (ID, NOM, DNI, TELEF) VALUES (NEXT VALUE FOR USUARI_GEN, 'Maria', '98765432B')",
+                "INSERT INTO " + schema + ".CREDENTIALS VALUES (NEXT VALUE FOR CREDENTIALS_GEN, 'pere123', 'genisBurro12')",
+                "INSERT INTO " + schema + ".CREDENTIALS VALUES (NEXT VALUE FOR CREDENTIALS_GEN, 'laura<3', 'bujarraXD69')"
+                "INSERT INTO " + schema + ".USUARI (ID, NOM, DNI, TELEF, USERNAME) VALUES (NEXT VALUE FOR USUARI_GEN, 'Pere', '87654321C', '123456789', 'pere123')",
+                "INSERT INTO " + schema + ".USUARI (ID, NOM, DNI, TELEF, USERNAME) VALUES (NEXT VALUE FOR USUARI_GEN, 'Laura', '11223344D', '987654321', 'laura<3')"
             };
             for (String datum : data) {
                 if (stmt.executeUpdate(datum)<=0) {
                     out.println("<span class='error'>Error inserting data: " + datum + "</span>");
                     return;
                 }
-                out.println("<pre> -> " + datum + "<pre>");
+                out.println("<pre> -> " + datum + "</pre>");        //si no va treu el / del segon <pre>
             }
         %>
         <button onclick="window.location='<%=request.getSession().getServletContext().getContextPath()%>'">Go home</button>

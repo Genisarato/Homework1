@@ -31,6 +31,7 @@ public class Usuari {
     private String nom;
     private String dni;
     private int telef;
+    private String username;
     
     @OneToMany(mappedBy = "Autor")
     private List<Article> articles;
@@ -51,6 +52,10 @@ public class Usuari {
     public void setTelef(int telef) {
         this.telef = telef;
     }
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public void setArticles(List<Article> articles) {
         this.articles = articles;
@@ -70,6 +75,10 @@ public class Usuari {
 
     public int getTelef() {
         return telef;
+    }
+    
+    public String getUsername() {
+        return username;
     }
 
     public List<Article> getArticles() {
