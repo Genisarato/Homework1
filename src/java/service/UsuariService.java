@@ -7,10 +7,12 @@ package service;
 import authn.Secured;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -60,6 +62,38 @@ public class UsuariService {
             result.add(u);
         }
         return result;
+    }
+    
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getCustomerById(@PathParam ("id") int id){
+       String queryText = "SELECT u FROM Usuari u WHERE u.id = :id";    //Contrasenya????
+       TypedQuery<Usuari> query = em.createQuery(queryText, Usuari.class);
+       query.setParameter("id", id);
+       Usuari result = query.getSingleResult();
+       if (result != null) {
+           //result.setPassword(null);  //Si es guardava la contrasenya, aqui s'anula per a no ensenyarla (sha de crear setPassword)
+           return Response.status(Response.Status.OK).entity(result).build();
+       } else return Response.status(Response.Status.NOT_FOUND).build();
+    }
+    
+    @PUT
+    @Secured
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response modifyCustomerById(@PathParam ("id") int id, String nom, String dni, int telef){
+       String queryText = "SELECT * FROM Usuari u WHERE u.id = :id";
+       TypedQuery<Usuari> query = em.createQuery(queryText, Usuari.class);
+       query.setParameter("id", id);
+       Usuari u = query.getSingleResult();
+       if (u == null) return Response.status(Response.Status.NOT_FOUND).build();
+       queryText = "UPDATE Usuari SET nom = :nom, dni = :dni, telef = :telef WHERE id = :id";
+       Query queryMod = em.createQuery(queryText);
+       queryMod.setParameter("nom", nom);
+       queryMod.setParameter("dni", dni);
+       queryMod.setParameter("telef", telef);
+       queryMod.setParameter("id", id);
+       queryMod.executeUpdate();
+       return Response.status(Response.Status.OK).build();
     }
 }
 
