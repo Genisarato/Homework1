@@ -41,7 +41,7 @@ import model.entities.Usuari;
 
 @Path("/article")
 public class ArticleService {
-        @PersistenceContext(unitName = "Homework1PU")
+    @PersistenceContext(unitName = "Homework1PU")
     private EntityManager em;
     private Map<Integer, Article> articles = new HashMap<>();
     
@@ -81,7 +81,7 @@ public class ArticleService {
     }
     
     
-    //Acabar
+    /*//Acabar
     //Headers params
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -118,7 +118,6 @@ public class ArticleService {
                        } catch (Exception e) {
                            return Response.status(Response.Status.UNAUTHORIZED).entity("Autenticació fallida").build();
                        }
-                        a.sumarViews();
                        return Response.status(Response.Status.OK).entity(a).build();
             }
             else{
@@ -128,11 +127,11 @@ public class ArticleService {
             //mirar lo de privat i retorna o no i sumar views
         }
         else return Response.status(Response.Status.NOT_FOUND).build();
-    }
+    }*/
     
 
     
-    //FET??
+    //FET
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Secured

@@ -51,7 +51,7 @@ public class UsuariService {
     public Collection<Usuari> getAllCustomers(){
         Collection<Usuari> usuaris = new ArrayList<>();
         Collection<Usuari> result = new ArrayList<>();
-        String query = "Select * from Usuari";
+        String query = "SELECT u FROM Usuari u";
         TypedQuery<Usuari> consulta = em.createQuery(query, Usuari.class);
         usuaris = consulta.getResultList();
         for(Usuari u : usuaris){
@@ -64,7 +64,7 @@ public class UsuariService {
         return result;
     }
     
-    @GET
+    /*@GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getCustomerById(@PathParam ("id") int id){
        String queryText = "SELECT u FROM Usuari u WHERE u.id = :id";    //Contrasenya????
@@ -81,7 +81,7 @@ public class UsuariService {
     @Secured
     @Consumes({MediaType.APPLICATION_JSON})
     public Response modifyCustomerById(@PathParam ("id") int id, String nom, String dni, int telef){
-       String queryText = "SELECT * FROM Usuari u WHERE u.id = :id";
+       String queryText = "SELECT u FROM Usuari u WHERE u.id = :id";
        TypedQuery<Usuari> query = em.createQuery(queryText, Usuari.class);
        query.setParameter("id", id);
        Usuari u = query.getSingleResult();
@@ -94,6 +94,6 @@ public class UsuariService {
        queryMod.setParameter("id", id);
        queryMod.executeUpdate();
        return Response.status(Response.Status.OK).build();
-    }
+    }*/
 }
 
