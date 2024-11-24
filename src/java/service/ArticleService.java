@@ -60,42 +60,67 @@ public class ArticleService extends AbstractFacade<Article>{
         return em;
     }
     
+    //Acabar de revisar si ha de retorna tot, 
+    /*
+    Yo suposo que només a de retorna titol, data, Nom_Escritor, Descripció i imatge
+    Tot lo demés no fa falta, mirar-meu millor
+    */
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getByTopicAndUser(@QueryParam("author") String author, @QueryParam("topic") String... Topic) {
+    public Response getByTopicAndUser(@QueryParam("author") long author, @QueryParam("topic") long... topics) {
 
-        // Validar que si se pasan más de 2 tópicos, se lance un error
-        if (Topic != null && Topic.length > 2) {
-            return Response.status(Response.Status.METHOD_NOT_ALLOWED)
-                           .entity("Se permiten un máximo de 2 topics.")
-                           .build();
-        }
-
-        // Construcción de la consulta JPQL
-        Usuari autor = new Usuari(author);
+        Usuari autorBD = null;
+        List<Topic> resultatNoms = null;
         String query = "SELECT a FROM Article a WHERE 1=1";
 
-        if (author != null && !author.isEmpty()) {
-            query += " AND a.autor = :author";
+        // Recuperamos el autor por su ID
+        if (author > 0) {
+            try {
+                autorBD = em.find(Usuari.class, author);  // Comparar el objeto 'autorBD' en la consulta
+                query += " AND a.autor=:author";
+            
+            } catch (NoResultException ex) {
+                return Response.status(Response.Status.NOT_FOUND).entity("Usuai no registrat").build();
+            }
         }
-        if (Topic != null && Topic.length > 0) {
-            query += " AND a.topic IN :topics";
+
+        // Validación de los tópicos
+        if (topics != null && topics.length > 0) {
+            try {
+                List<Long> primers2 = Arrays.stream(topics)  // Convertimos a Stream<Long>
+                                   .limit(2)       // Tomamos los primeros 2 elementos
+                                   .boxed()        // Convertimos a Long (tipo objeto)
+                                   .collect(Collectors.toList());
+                // Obtener los tópicos por sus IDs
+                String existQuery = "SELECT t FROM Topic t WHERE t.id IN :ids";
+                resultatNoms = em.createQuery(existQuery, Topic.class)
+                                 .setParameter("ids", primers2)  // Usamos los IDs directamente
+                                 .getResultList();
+                // Comprobamos que todos los tópicos existen
+                if (resultatNoms.size() != primers2.size()) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity("Un o més tòpics no són vàlids").build();
+                }
+                query += " AND a.topic IN :topics";  // Compara los objetos 'topic' en la consulta
+            } catch (NoResultException ex) {
+                return Response.status(Response.Status.NOT_FOUND).entity("Topics no existents").build();
+            }
         }
+
         query += " ORDER BY a.num_views DESC";
 
-        // Crear la consulta
+        // Crear la consulta final
         TypedQuery<Article> consulta = em.createQuery(query, Article.class);
 
         // Establecer parámetros
-        if (author != null && !author.isEmpty()) {
-            consulta.setParameter("author", autor);
+        if (author > 0) {
+            consulta.setParameter("author", autorBD);  // Pasamos el objeto completo 'autorBD'
         }
 
-        if (Topic != null && Topic.length > 0) {
-            consulta.setParameter("topics", Arrays.asList(Topic));  // Asegurar que los tópicos se pasen como lista
+        if (topics != null && topics.length > 0) {
+            consulta.setParameter("topics", resultatNoms);  // Pasamos la lista completa de objetos 'Topic'
         }
 
-        // Ejecutar la consulta y obtener resultados
+        // Ejecutar la consulta y obtener los resultados
         List<Article> articlesList = consulta.getResultList();
 
         // Si no se encuentran artículos, devolver un error 404
@@ -110,9 +135,8 @@ public class ArticleService extends AbstractFacade<Article>{
                        .entity(articlesList)
                        .build();
     }
-
-    
-    
+   
+    //Fer últim mètode de article
     /*//Acabar
     //Headers params
     @GET

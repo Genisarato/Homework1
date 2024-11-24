@@ -5,6 +5,7 @@
  */
 package model.entities;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,6 +36,7 @@ public class Usuari {
     private String username;
     
     @OneToMany(mappedBy = "autor")
+    @JsonbTransient
     private List<Article> articles = new LinkedList<Article>();
     
     private String lastArticle;
