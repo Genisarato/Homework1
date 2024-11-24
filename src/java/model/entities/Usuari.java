@@ -53,6 +53,10 @@ public class Usuari {
     public void setDni(String dni) {
         this.dni = dni;
     }
+    
+    public void setId(long id){
+        this.id = id;
+    }
 
     public void setTelef(int telef) {
         this.telef = telef;

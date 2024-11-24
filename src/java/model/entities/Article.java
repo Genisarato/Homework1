@@ -56,6 +56,10 @@ public class Article {
     
     public Article() {
     }
+    
+    public void setId(int id){
+        this.id = id;
+    }
 
     public void setTitol(String titol) {
         this.titol = titol;
