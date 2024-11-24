@@ -23,6 +23,7 @@ public class CommentFacadeREST extends AbstractFacade<Comment> {
 
     @PersistenceContext(unitName = "Homework1PU")
     private EntityManager em;
+    
 
     public CommentFacadeREST() {
         super(Comment.class);

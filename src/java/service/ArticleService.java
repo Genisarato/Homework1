@@ -6,7 +6,9 @@ package service;
 
 import authn.Credentials;
 import authn.Secured;
+import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.ws.rs.Consumes;
@@ -21,6 +23,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
@@ -30,6 +33,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import model.entities.Article;
+import model.entities.Comment;
 import model.entities.Topic;
 import model.entities.Usuari;
 
@@ -38,9 +42,9 @@ import model.entities.Usuari;
  * @author USUARIO
  */
 
-
+@Stateless
 @Path("/article")
-public class ArticleService {
+public class ArticleService extends AbstractFacade<Article>{
     @PersistenceContext(unitName = "Homework1PU")
     private EntityManager em;
     private Map<Integer, Article> articles = new HashMap<>();
@@ -48,37 +52,65 @@ public class ArticleService {
     @Context
     private HttpHeaders headers;
     
-    //FET
+    public ArticleService() {
+        super(Article.class);
+    }
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+    
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Collection<Article> getByTopicAndUser(@QueryParam("author") String author, @QueryParam("topic") String... Topic){
-        
-            if (Topic != null && Topic.length > 2)
-            throw new WebApplicationException("Se permiten un máximo de 2 topics.", Response.Status.METHOD_NOT_ALLOWED);
+    public Response getByTopicAndUser(@QueryParam("author") String author, @QueryParam("topic") String... Topic) {
 
+        // Validar que si se pasan más de 2 tópicos, se lance un error
+        if (Topic != null && Topic.length > 2) {
+            return Response.status(Response.Status.METHOD_NOT_ALLOWED)
+                           .entity("Se permiten un máximo de 2 topics.")
+                           .build();
+        }
+
+        // Construcción de la consulta JPQL
+        Usuari autor = new Usuari(author);
         String query = "SELECT a FROM Article a WHERE 1=1";
-        
-        if(author != null && !author.isEmpty()){
-            query += " AND a.author = :author";
+
+        if (author != null && !author.isEmpty()) {
+            query += " AND a.autor = :author";
         }
         if (Topic != null && Topic.length > 0) {
             query += " AND a.topic IN :topics";
         }
         query += " ORDER BY a.num_views DESC";
+
         // Crear la consulta
         TypedQuery<Article> consulta = em.createQuery(query, Article.class);
-        
+
         // Establecer parámetros
         if (author != null && !author.isEmpty()) {
-            consulta.setParameter("author", author);
+            consulta.setParameter("author", autor);
         }
 
         if (Topic != null && Topic.length > 0) {
-            consulta.setParameter("topics", List.of(Topic));
+            consulta.setParameter("topics", Arrays.asList(Topic));  // Asegurar que los tópicos se pasen como lista
         }
 
-        return consulta.getResultList();
+        // Ejecutar la consulta y obtener resultados
+        List<Article> articlesList = consulta.getResultList();
+
+        // Si no se encuentran artículos, devolver un error 404
+        if (articlesList.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND)
+                           .entity("No se encontraron artículos con los parámetros proporcionados.")
+                           .build();
+        }
+
+        // Si se encontraron artículos, devolver los artículos encontrados
+        return Response.status(Response.Status.OK)
+                       .entity(articlesList)
+                       .build();
     }
+
     
     
     /*//Acabar
@@ -131,15 +163,25 @@ public class ArticleService {
     
 
     
-    //FET
+    //FET i funcional
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Secured
     public Response crearArticle(Article e){
         //comprovar que asta registrat
-        Usuari autor = em.find(Usuari.class, e.getAutor().getId());
+        Usuari autor = e.getAutor();
         //Comprovem que usuari existeix a la BD, sino retornem error per simplificar el disseny, podriem crear-lo.
-         if(autor == null)return Response.status(Response.Status.NOT_FOUND).entity("Usuari no trobat").build();
+         //if(autor == null)return Response.status(Response.Status.NOT_FOUND).entity("Usuari no trobat").build();
+         Usuari autorBD;
+        try {
+            // Recuperamos el usuario por su ID desde la base de datos
+            String queryAutor = "SELECT u FROM Usuari u WHERE u.id = :id";
+            autorBD = em.createQuery(queryAutor, Usuari.class)
+                        .setParameter("id", autor.getId())
+                        .getSingleResult();
+        } catch (NoResultException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Usuari no trobat").build();
+        }
         //Hem de comprovar que els 2 primers tòpics de l'article existeixein (si li passem més de 2 agafem els 2 primers)
         //Decisions de disseny
         //Obtenim els noms dels 2 primers tòpics per a buscar-los a la BD, com en el cas anterior retornarem error si no hi ha
@@ -154,12 +196,13 @@ public class ArticleService {
                                     getResultList();
         //Comprovem la existència dels tòpics ja que si la size no coincideix signficia que un dels dos no coincideix
         if(llistaTopics.size() != resultatNoms.size())return Response.status(Response.Status.BAD_REQUEST).entity("Un o més tòpics no són vàlids").build();
-        
-        
+        autorBD.addArticle(e);
+        autorBD.setLinkArticle(e.getTitol());
         
         e.setData_publi(new Date());
         e.setTopics(resultatNoms);
         e.setPrivat(false);
+        em.persist(e);
         //Una vegada fetes totes les comprovacions es fa la inserció del article a la llista
         articles.put( e.getId(), e);
         return Response.status(Response.Status.CREATED).entity(e.getId()).build();

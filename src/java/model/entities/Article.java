@@ -4,6 +4,7 @@
  */
 package model.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,7 +35,7 @@ public class Article {
     private String imatge;
     
     @ManyToOne
-    private Usuari Autor;   //Autor només un, decisió de disseny, simplicitat
+    private Usuari autor;   //Autor només un, decisió de disseny, simplicitat
     
     private int num_views;
     
@@ -61,7 +62,7 @@ public class Article {
     }
 
     public void setAutor(Usuari Autor) {
-        this.Autor = Autor;
+        this.autor = Autor;
     }
 
     public void setTopics(Collection<Topic> topics) {
@@ -81,7 +82,7 @@ public class Article {
     }
 
     public Usuari getAutor() {
-        return Autor;
+        return autor;
     }
 
     public int getNum_views() {

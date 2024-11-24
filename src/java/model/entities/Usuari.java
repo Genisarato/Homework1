@@ -13,6 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -33,12 +34,16 @@ public class Usuari {
     private int telef;
     private String username;
     
-    @OneToMany(mappedBy = "Autor")
-    private List<Article> articles;
+    @OneToMany(mappedBy = "autor")
+    private List<Article> articles = new LinkedList<Article>();
     
     private String lastArticle;
     
     public Usuari() {
+    }
+    
+    public Usuari(String nom){
+        this.nom = nom;
     }
 
     public void setNom(String nom) {
@@ -87,5 +92,9 @@ public class Usuari {
 
     public void setLinkArticle(String lastArticle) {
         this.lastArticle = lastArticle;
-    }   
+    }
+    
+    public void addArticle(Article e){
+        articles.add(e);
+    }
 }
