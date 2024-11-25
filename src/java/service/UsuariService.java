@@ -56,40 +56,40 @@ public class UsuariService extends AbstractFacade<Usuari>{
     }
     
     @GET
-    @Path("/all")
     @Produces({MediaType.APPLICATION_JSON})
-    public Collection<Usuari> getAllCustomers(){
-        Collection<Usuari> usuaris = new ArrayList<>();
+    public Response getAllCustomers(){
+        List<Usuari> usuaris = new ArrayList<>();
         Collection<Usuari> result = new ArrayList<>();
         String query = "SELECT u FROM Usuari u";
-        TypedQuery<Usuari> consulta = em.createQuery(query, Usuari.class);
-        usuaris = consulta.getResultList();
+        usuaris = em.createQuery(query, Usuari.class).getResultList();
         for(Usuari u : usuaris){
-            if(u.getArticles() != null){
-                Article a = u.getArticles().get(u.getArticles().size() - 1);
-                u.setLinkArticle("/article" + a.getId());
-            }
+        if (u.getArticles() != null && !u.getArticles().isEmpty()) {
+            Article a = u.getArticles().get(u.getArticles().size() - 1);  // Solo accedemos si la lista no está vacía
+            u.setLinkArticle("/article" + a.getId());
+        }
             result.add(u);
         }
-        return result;
+        return Response.status(Response.Status.OK)
+               .entity(result)
+               .build();
     }
     
     @GET
     @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getCustomerById(@PathParam ("id") int id){
+    public Response getCustomerById(@PathParam ("id") long id){
        Usuari result = em.find(Usuari.class, id);
        if (result != null) return Response.status(Response.Status.OK).entity(result).build();
         else return Response.status(Response.Status.NOT_FOUND).build();
     }
-    
+
     @PUT
     @Secured
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response modifyCustomerById(@PathParam ("id") int id, String nom, String dni, int telef, String username){
+    public Response modifyCustomerById(@PathParam ("id") long id, String nom, String dni, int telef, String username){
        Usuari u = em.find(Usuari.class, id);
        if (u == null) return Response.status(Response.Status.NOT_FOUND).build();
-       String queryText = "UPDATE Usuari SET nom = :nom, dni = :dni, telef = :telef, username = :username WHERE id = :id";
+       String queryText = "UPDATE Usuari u SET u.nom = :nom, u.dni = :dni, u.telef = :telef, u.username = :username WHERE u.id = :id";
        Query queryMod = em.createQuery(queryText);
        queryMod.setParameter("nom", nom);
        queryMod.setParameter("dni", dni);

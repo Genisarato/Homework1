@@ -67,7 +67,7 @@ public class ArticleService extends AbstractFacade<Article>{
     Yo suposo que només a de retorna titol, data, Nom_Escritor, Descripció i imatge
     Tot lo demés no fa falta, mirar-meu millor
     */
-    /*@GET
+    @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getByTopicAndUser(@QueryParam("author") long author, @QueryParam("topic") long... topics) {
 
@@ -243,6 +243,6 @@ public class ArticleService extends AbstractFacade<Article>{
         //Una vegada fetes totes les comprovacions es fa la inserció del article a la llista
         articles.put( e.getId(), e);
         return Response.status(Response.Status.CREATED).entity(e.getId()).build();
-    }*/
+    }
     
 }
