@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -84,17 +85,19 @@ public class UsuariService extends AbstractFacade<Usuari>{
     }
 
     @PUT
+    @Path("/{id}")
     @Secured
+    @Transactional
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response modifyCustomerById(@PathParam ("id") long id, String nom, String dni, int telef, String username){
+    public Response modifyCustomerById(@PathParam ("id") long id, Usuari u2){
        Usuari u = em.find(Usuari.class, id);
        if (u == null) return Response.status(Response.Status.NOT_FOUND).build();
-       String queryText = "UPDATE Usuari u SET u.nom = :nom, u.dni = :dni, u.telef = :telef, u.username = :username WHERE u.id = :id";
+       String queryText = "UPDATE Usuari SET nom = :nom, dni = :dni, telef = :telef, username = :username WHERE id = :id";
        Query queryMod = em.createQuery(queryText);
-       queryMod.setParameter("nom", nom);
-       queryMod.setParameter("dni", dni);
-       queryMod.setParameter("telef", telef);
-       queryMod.setParameter("username", username);
+       queryMod.setParameter("nom", u2.getNom());
+       queryMod.setParameter("dni", u2.getDni());
+       queryMod.setParameter("telef", u2.getTelef());
+       queryMod.setParameter("username", u2.getUsername());
        queryMod.setParameter("id", id);
        if (queryMod.executeUpdate() == 1) return Response.status(Response.Status.OK).build();
        else return Response.status(Response.Status.BAD_REQUEST).build();
