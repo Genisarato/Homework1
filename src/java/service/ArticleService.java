@@ -24,6 +24,7 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
@@ -35,6 +36,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 import model.entities.Article;
+import model.entities.ArticleResposta;
 import model.entities.Comment;
 import model.entities.Topic;
 import model.entities.Usuari;
@@ -134,10 +136,25 @@ public class ArticleService extends AbstractFacade<Article>{
                            .entity("No hi ha articles d'aquest autor/amb aquest tòpics.")
                            .build();
         }
-
+        List<ArticleResposta> result = new ArrayList<>();
+        for(Article a : articlesList){
+            List<String> nomTopics = new ArrayList<>();
+            Collection<Topic> topicsresult = a.getTopics();
+            ArticleResposta nou = new ArticleResposta();
+            nou.setTitol(a.getTitol());
+            nou.setDescripcio(a.getDescripcio());
+            nou.setN_views(a.getNum_views());
+            nou.setNom_Aut(a.getAutor().getNom());
+            nou.setData_publi(a.getData_publi());
+            for(Topic t : topicsresult){
+                nomTopics.add(t.getName());
+            }
+            nou.setTopics(nomTopics);
+            result.add(nou);
+        }
         //Es retorna la llista de articles
         return Response.status(Response.Status.OK)
-                       .entity(articlesList)
+                       .entity(result)
                        .build();
     }
    
@@ -158,13 +175,39 @@ public class ArticleService extends AbstractFacade<Article>{
                 //So està registrat enviar l'article, sinó un 401(unothorized)
                 if(registrat){
                     a.sumarViews();
-                    return Response.ok().entity(a).build();
+                    Collection<Topic> topicsresult = a.getTopics();
+                    List<String> nomTopics = new ArrayList<>();
+                    ArticleResposta nou = new ArticleResposta();
+                    nou.setTitol(a.getTitol());
+                    nou.setDescripcio(a.getDescripcio());
+                    nou.setN_views(a.getNum_views());
+                    nou.setNom_Aut(a.getAutor().getNom());
+                    nou.setData_publi(a.getData_publi());
+                    topicsresult = a.getTopics();
+                    for(Topic t : topicsresult){
+                        nomTopics.add(t.getName());
+                    }
+                    nou.setTopics(nomTopics);
+                    return Response.ok().entity(nou).build();
                 }
                 else return Response.status(Response.Status.UNAUTHORIZED).entity("Aquest article és privat i has d'estar registrat").build();
             }
             else{
                 a.sumarViews();
-                return Response.ok().entity(a).build();
+                Collection<Topic> topicsresult = a.getTopics();
+                List<String> nomTopics = new ArrayList<>();
+                ArticleResposta nou = new ArticleResposta();
+                nou.setTitol(a.getTitol());
+                nou.setDescripcio(a.getDescripcio());
+                nou.setN_views(a.getNum_views());
+                nou.setNom_Aut(a.getAutor().getNom());
+                nou.setData_publi(a.getData_publi());
+                topicsresult = a.getTopics();
+                for(Topic t : topicsresult){
+                    nomTopics.add(t.getName());
+                }
+                nou.setTopics(nomTopics);
+                return Response.ok().entity(nou).build();
             }
             //mirar lo de privat i retorna o no i sumar views
         }
