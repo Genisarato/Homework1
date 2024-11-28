@@ -65,7 +65,7 @@ public class UsuariService extends AbstractFacade<Usuari>{
         usuaris = em.createQuery(query, Usuari.class).getResultList();
         for(Usuari u : usuaris){
         if (u.getArticles() != null && !u.getArticles().isEmpty()) {
-            Article a = u.getArticles().get(u.getArticles().size() - 1);  // Solo accedemos si la lista no está vacía
+            Article a = u.getArticles().get(u.getArticles().size() - 1);  // Sol accedim si la llista no está buida
             u.setLinkArticle("/article" + a.getId());
         }
             result.add(u);

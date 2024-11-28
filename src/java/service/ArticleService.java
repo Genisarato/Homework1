@@ -12,6 +12,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -37,7 +38,6 @@ import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 import model.entities.Article;
 import model.entities.ArticleResposta;
-import model.entities.Comment;
 import model.entities.Topic;
 import model.entities.Usuari;
 
@@ -70,7 +70,7 @@ public class ArticleService extends AbstractFacade<Article>{
     Tot lo demés no fa falta, mirar-meu millor
     */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getByTopicAndUser(@QueryParam("author") long author, @QueryParam("topic") long... topics) {
 
         Usuari autorBD = null;
@@ -163,7 +163,7 @@ public class ArticleService extends AbstractFacade<Article>{
     //Headers params
     @GET
     @Path("/{id}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getArticleById(@PathParam("id") int id){
         //Obtenim l'article amb el find ja que anem per id
         Article a = em.find(Article.class, id);
@@ -245,7 +245,7 @@ public class ArticleService extends AbstractFacade<Article>{
     
     //FET i funcional
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Secured
     public Response crearArticle(Article e){
         //comprovar que asta registrat
@@ -287,5 +287,18 @@ public class ArticleService extends AbstractFacade<Article>{
         articles.put( e.getId(), e);
         return Response.status(Response.Status.CREATED).entity(e.getId()).build();
     }
+    
+   /*@DELETE
+   @Path("/{id}")
+   public Response deleteArticle(@PathParam("id") int id){
+       Article esborrar = em.find(Article.class, id);
+       //Esborrar aquest
+       /*
+       Però tema FK que fem?
+       */
+       /*String query = "DELETE FROM "
+       
+       
+   }*/
     
 }

@@ -10,8 +10,10 @@ import java.util.List;
 
 /**
  *
- * @author USUARIO
+ * @author Genís i Jan
  */
+
+//Clase auxiliar per a només retornar certes coses de Article
 @XmlRootElement
 public class ArticleResposta {
     private String titol;

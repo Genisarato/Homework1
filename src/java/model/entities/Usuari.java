@@ -103,4 +103,9 @@ public class Usuari {
     public void addArticle(Article e){
         articles.add(e);
     }
+    
+    public void removeLastArticle(){
+    if (!articles.isEmpty())lastArticle = articles.get(articles.size()).getTitol();
+    else lastArticle = null;
+    }
 }
