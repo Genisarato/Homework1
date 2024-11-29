@@ -57,7 +57,7 @@ public class UsuariService extends AbstractFacade<Usuari>{
     }
     
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getAllCustomers(){
         List<Usuari> usuaris = new ArrayList<>();
         Collection<Usuari> result = new ArrayList<>();
@@ -77,7 +77,7 @@ public class UsuariService extends AbstractFacade<Usuari>{
     
     @GET
     @Path("/{id}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getCustomerById(@PathParam ("id") long id){
        Usuari result = em.find(Usuari.class, id);
        if (result != null) return Response.status(Response.Status.OK).entity(result).build();
@@ -88,7 +88,7 @@ public class UsuariService extends AbstractFacade<Usuari>{
     @Path("/{id}")
     @Secured
     @Transactional
-    @Consumes({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response modifyCustomerById(@PathParam ("id") long id, Usuari u2){
        Usuari u = em.find(Usuari.class, id);
        if (u == null) return Response.status(Response.Status.NOT_FOUND).build();
@@ -100,7 +100,7 @@ public class UsuariService extends AbstractFacade<Usuari>{
        queryMod.setParameter("username", u2.getUsername());
        queryMod.setParameter("id", id);
        if (queryMod.executeUpdate() == 1) return Response.status(Response.Status.OK).build();
-       else return Response.status(Response.Status.BAD_REQUEST).build();
+       else return Response.status(Response.Status.UNAUTHORIZED).build();
     }
 }
 
