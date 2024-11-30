@@ -64,10 +64,10 @@ public class UsuariService extends AbstractFacade<Usuari>{
         String query = "SELECT u FROM Usuari u";
         usuaris = em.createQuery(query, Usuari.class).getResultList();
         for(Usuari u : usuaris){
-        if (u.getArticles() != null && !u.getArticles().isEmpty()) {
-            Article a = u.getArticles().get(u.getArticles().size() - 1);  // Sol accedim si la llista no está buida
-            u.setLinkArticle("/article" + a.getId());
-        }
+            /*if (u.getArticles() != null && !u.getArticles().isEmpty()) {
+                Article a = u.getArticles().get(u.getArticles().size() - 1);  // Sol accedim si la llista no está buida
+                u.setLinkArticle("/article" + a.getId());
+            }*/
             result.add(u);
         }
         return Response.status(Response.Status.OK)

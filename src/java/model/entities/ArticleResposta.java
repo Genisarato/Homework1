@@ -22,6 +22,7 @@ public class ArticleResposta {
     private Date data_publi;
     private String descripcio;
     private List<String> topics;
+    private String lastArticle;
 
     public ArticleResposta() {
     }
@@ -72,6 +73,14 @@ public class ArticleResposta {
 
     public List<String> getTopics() {
         return topics;
+    }
+
+    public String getLastArticle() {
+        return lastArticle;
+    }
+
+    public void setLastArticle(String lastArticle) {
+        this.lastArticle = lastArticle;
     }
     
     

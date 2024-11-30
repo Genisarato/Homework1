@@ -276,13 +276,13 @@ public class ArticleService extends AbstractFacade<Article>{
                                     getResultList();
         //Comprovem la existència dels tòpics ja que si la size no coincideix signficia que un dels dos no coincideix
         if(llistaTopics.size() != resultatNoms.size())return Response.status(Response.Status.BAD_REQUEST).entity("Un o més tòpics no són vàlids").build();
-        autorBD.addArticle(e);
-        autorBD.setLinkArticle(e.getTitol());
-        
         e.setData_publi(new Date());
         e.setTopics(resultatNoms);
         //e.setPrivat(false);
         em.persist(e);
+        autorBD.addArticle(e);
+        autorBD.setLastArticleId(e.getId());
+        
         //Una vegada fetes totes les comprovacions es fa la inserció del article a la llista
         articles.put( e.getId(), e);
         return Response.status(Response.Status.CREATED).entity(e.getId()).build();

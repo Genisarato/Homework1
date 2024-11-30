@@ -6,12 +6,15 @@
 package model.entities;
 
 import jakarta.json.bind.annotation.JsonbTransient;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Transient;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -35,11 +38,15 @@ public class Usuari {
     private int telef;
     private String username;
     
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Link links;
+    
     @OneToMany(mappedBy = "autor")
     @JsonbTransient
     private List<Article> articles = new LinkedList<Article>();
     
-    private String lastArticle;
+;
+    
     
     public Usuari() {
     }
@@ -95,17 +102,25 @@ public class Usuari {
     public List<Article> getArticles() {
         return articles;
     }
+    
+    public void setLastArticleId(int lastArticleId) {
+        // Actualizamos el enlace HATEOAS
+        if(links == null){
+            links = new Link();
+        }
+       links.setLastArticle(lastArticleId);
+    }
 
-    public void setLinkArticle(String lastArticle) {
-        this.lastArticle = lastArticle;
+    public Link getLinks() {
+        return links;
     }
     
     public void addArticle(Article e){
         articles.add(e);
     }
     
-    public void removeLastArticle(){
+    /*public void removeLastArticle(){
     if (!articles.isEmpty())lastArticle = articles.get(articles.size()).getTitol();
     else lastArticle = null;
-    }
+    }*/
 }
