@@ -13,12 +13,14 @@
             <file>file:/C:/Users/USUARIO/Desktop/uni/3er_any/SO/Homework1/nbproject/project.xml</file>
             <file>file:/C:/Users/USUARIO/Desktop/uni/3er_any/SO/Homework1/src/java/authn/Credentials.java</file>
             <file>file:/C:/Users/USUARIO/Desktop/uni/3er_any/SO/Homework1/web/index.html</file>
+            <file>file:/C:/Users/USUARIO/Desktop/uni/3er_any/SO/Homework1/src/java/model/entities/ArticleResposta.java</file>
             <file>file:/C:/Users/USUARIO/Desktop/uni/3er_any/SO/Homework1/nbproject/project.properties</file>
             <file>file:/C:/Users/USUARIO/Desktop/uni/3er_any/SO/Homework1/src/conf/persistence.xml</file>
             <file>file:/C:/Users/USUARIO/Desktop/uni/3er_any/SO/Homework1/web/install.jsp</file>
             <file>file:/C:/Users/USUARIO/Desktop/uni/3er_any/SO/Homework1/nbproject/rest-build.xml</file>
             <file>file:/C:/Users/USUARIO/Desktop/uni/3er_any/SO/Homework1/src/java/service/UsuariService.java</file>
             <file>file:/C:/Users/USUARIO/Desktop/uni/3er_any/SO/Homework1/src/java/authn/RESTRequestFilter.java</file>
+            <file>file:/C:/Users/USUARIO/Desktop/uni/3er_any/SO/Homework1/src/java/model/entities/Topic.java</file>
         </group>
     </open-files>
 </project-private>

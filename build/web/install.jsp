@@ -38,6 +38,7 @@
             String data[] = new String[]{
                 "INSERT INTO " + schema + ".TOPIC VALUES (NEXT VALUE FOR TOPIC_GEN, 'Computer Science')",
                 "INSERT INTO " + schema + ".TOPIC VALUES (NEXT VALUE FOR TOPIC_GEN, 'Bases de dades')",
+                "INSERT INTO " + schema + ".TOPIC VALUES (NEXT VALUE FOR TOPIC_GEN, 'Introduction to Java')",
                 "INSERT INTO " + schema + ".CREDENTIALS VALUES (NEXT VALUE FOR CREDENTIALS_GEN, 'sob', 'sob')",
                 "INSERT INTO " + schema + ".USUARI (ID, NOM, DNI) VALUES (NEXT VALUE FOR USUARI_GEN, 'Joan', '12345678A')",
                 "INSERT INTO " + schema + ".USUARI (ID, NOM, DNI) VALUES (NEXT VALUE FOR USUARI_GEN, 'Maria', '98765432B')",

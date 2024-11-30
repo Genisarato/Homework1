@@ -70,7 +70,7 @@ public class ArticleService extends AbstractFacade<Article>{
     Tot lo demés no fa falta, mirar-meu millor
     */
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getByTopicAndUser(@QueryParam("author") long author, @QueryParam("topic") long... topics) {
 
         Usuari autorBD = null;
@@ -163,7 +163,7 @@ public class ArticleService extends AbstractFacade<Article>{
     //Headers params
     @GET
     @Path("/{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getArticleById(@PathParam("id") int id){
         //Obtenim l'article amb el find ja que anem per id
         Article a = em.find(Article.class, id);
@@ -245,7 +245,7 @@ public class ArticleService extends AbstractFacade<Article>{
     
     //FET i funcional
     @POST
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Secured
     public Response crearArticle(Article e){
         //comprovar que asta registrat
