@@ -20,7 +20,8 @@ import java.util.Date;
 
 /**
  *
- * @author Genis i Jan
+ * @author Genis Aragones Torralbo
+ * @author Jan Torres Rodriguez
  */
 
 @XmlRootElement

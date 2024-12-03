@@ -10,7 +10,8 @@ import java.util.List;
 
 /**
  *
- * @author Genís i Jan
+ * @author Genis Aragones Torralbo
+ * @author Jan Torres Rodriguez
  */
 
 //Clase auxiliar per a només retornar certes coses de Article

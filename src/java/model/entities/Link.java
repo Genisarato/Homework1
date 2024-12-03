@@ -13,7 +13,8 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author USUARIO
+ * @author Genis Aragones Torralbo
+ * @author Jan Torres Rodriguez
  */
 
 @XmlRootElement
