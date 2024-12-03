@@ -43,7 +43,8 @@ import model.entities.Usuari;
 
 /**
  *
- * @author USUARIO
+ * @author Genis Aragones Torralbo
+ * @author Jan Torres Rodriguez
  */
 
 @Stateless

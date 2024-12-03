@@ -6,6 +6,7 @@ package service;
 
 import authn.Secured;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
@@ -36,7 +37,8 @@ import model.entities.Usuari;
 
 /**
  *
- * @author USUARIO
+ * @author Genis Aragones Torralbo
+ * @author Jan Torres Rodriguez
  */
 @Path("/customer")
 public class UsuariService extends AbstractFacade<Usuari>{
@@ -79,9 +81,15 @@ public class UsuariService extends AbstractFacade<Usuari>{
     @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getCustomerById(@PathParam ("id") long id){
-       Usuari result = em.find(Usuari.class, id);
-       if (result != null) return Response.status(Response.Status.OK).entity(result).build();
-        else return Response.status(Response.Status.NOT_FOUND).build();
+        try {
+            Usuari result = em.find(Usuari.class, id);
+            if (result == null) {
+                return Response.status(Response.Status.NOT_FOUND).entity("Usuari no registrat").build();
+            }
+            return Response.status(Response.Status.OK).entity(result).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error en el servidor").build();
+        }
     }
 
     @PUT
