@@ -42,8 +42,8 @@
                 "INSERT INTO " + schema + ".CREDENTIALS VALUES (NEXT VALUE FOR CREDENTIALS_GEN, 'sob', 'sob')",
                 "INSERT INTO " + schema + ".USUARI (ID, NOM, DNI) VALUES (NEXT VALUE FOR USUARI_GEN, 'Joan', '12345678A')",
                 "INSERT INTO " + schema + ".USUARI (ID, NOM, DNI) VALUES (NEXT VALUE FOR USUARI_GEN, 'Maria', '98765432B')",
-                "INSERT INTO " + schema + ".CREDENTIALS (ID, USERNAME, PASSWORD) VALUES (NEXT VALUE FOR CREDENTIALS_GEN, 'pere123', 'genisBurro12')",
-                "INSERT INTO " + schema + ".CREDENTIALS (ID, USERNAME, PASSWORD) VALUES (NEXT VALUE FOR CREDENTIALS_GEN, 'laura<3', 'bujarraXD69')",
+                "INSERT INTO " + schema + ".CREDENTIALS (ID, USERNAME, PASSWORD) VALUES (NEXT VALUE FOR CREDENTIALS_GEN, 'pere123', '12hola34')",
+                "INSERT INTO " + schema + ".CREDENTIALS (ID, USERNAME, PASSWORD) VALUES (NEXT VALUE FOR CREDENTIALS_GEN, 'laura<3', '1234')",
                 "INSERT INTO " + schema + ".USUARI (ID, NOM, DNI, TELEF, USERNAME) VALUES (NEXT VALUE FOR USUARI_GEN, 'Pere', '87654321C',  123456789, 'pere123')",
                 "INSERT INTO " + schema + ".USUARI (ID, NOM, DNI, TELEF, USERNAME) VALUES (NEXT VALUE FOR USUARI_GEN, 'Laura', '11223344D', 987654321, 'laura<3')"
             };
